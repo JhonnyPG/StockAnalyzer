@@ -9,7 +9,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func connect() {
+func Connect() *sql.DB {
 	dsn := "postgresql://trusteduser:gLqBgcUnAVDj2DPsLvoHag@stock-analyzer-9114.j77.aws-us-west-2.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full"
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
@@ -22,5 +22,6 @@ func connect() {
 		log.Fatal("failed to execute query", err)
 	}
 
-	fmt.Println(now)
+	fmt.Println("✅ Conected to CockroachDB " + now.String())
+	return db
 }

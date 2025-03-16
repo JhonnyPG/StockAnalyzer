@@ -4,14 +4,9 @@ import (
 	"database/sql"
 	"encoding/json"
 	"net/http"
-)
 
-type Stock struct {
-	Ticker     string `json:"ticker"`
-	Company    string `json:"company"`
-	Brokerage  string `json:"brokerage"`
-	TargetFrom string `json:"target_from"`
-}
+	"github.com/JhonnyPG/StockAnalyzer/internal/models"
+)
 
 func GetStocks(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -25,9 +20,9 @@ func GetStocks(db *sql.DB) http.HandlerFunc {
 		}
 		defer rows.Close()
 
-		var stocks []Stock
+		var stocks []models.Stock
 		for rows.Next() {
-			var s Stock
+			var s models.Stock
 			err := rows.Scan(&s.Ticker, &s.Company, &s.Brokerage, &s.TargetFrom)
 			if err != nil {
 				http.Error(w, "Error al leer datos", http.StatusInternalServerError)
