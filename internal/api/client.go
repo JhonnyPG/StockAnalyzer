@@ -7,25 +7,14 @@ import (
 
 	"net/http"
 	"time"
-)
 
-// StockItem is a struct that represents a stock item
-type StockItem struct {
-	Ticker     string    `json:"ticker"`
-	TargetFrom string    `json:"target_from"`
-	TargetTo   string    `json:"target_to"`
-	Company    string    `json:"company"`
-	Action     string    `json:"action"`
-	Brokerage  string    `json:"brokerage"`
-	RatingFrom string    `json:"rating_from"`
-	RatingTo   string    `json:"rating_to"`
-	Time       time.Time `json:"time"`
-}
+	"github.com/JhonnyPG/StockAnalyzer/internal/models"
+)
 
 // APIResponse is a struct that represents the response from the API
 type APIResponse struct {
-	Items    []StockItem `json:"items"`
-	NextPage string      `json:"next_page"`
+	Items    []models.Stock `json:"items"`
+	NextPage string         `json:"next_page"`
 }
 
 // Client is a struct that represents the client
@@ -77,8 +66,8 @@ func (c *Client) GetStocks(nextPage string) (*APIResponse, error) {
 	return &apiResp, nil
 }
 
-func (c *Client) GetAllStock() ([]StockItem, error) {
-	var allItems []StockItem
+func (c *Client) GetAllStock() ([]models.Stock, error) {
+	var allItems []models.Stock
 	nextPage := ""
 
 	for {
