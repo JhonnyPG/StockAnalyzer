@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/JhonnyPG/StockAnalyzer/internal/models"
@@ -50,10 +51,37 @@ func GetStocks(db *sql.DB) http.HandlerFunc {
 	}
 }
 
+func calculateBestStock(db *sql.DB) (models.Stock, error) {
+	var bestStock models.Stock
+	err := db.QueryRow(`
+        SELECT * FROM stocks 
+        ORDER BY (target_to::numeric - target_from::numeric) DESC 
+        LIMIT 1
+    `).Scan(
+		&bestStock.Ticker,
+		&bestStock.Company,
+		&bestStock.Brokerage,
+		&bestStock.Action,
+		&bestStock.RatingFrom,
+		&bestStock.RatingTo,
+		&bestStock.TargetFrom,
+		&bestStock.TargetTo,
+		&bestStock.Time,
+	)
+	if err != nil {
+		return models.Stock{}, fmt.Errorf("error obteniendo recomendación: %w", err)
+	}
+	return bestStock, nil
+}
+
 func GetRecommendationHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Lógica de recomendación (ej: stock con mayor diferencia en target_to - target_from)
-		bestStock := calculateBestStock(db)
+		// Lógica de recomendación
+		bestStock, err := calculateBestStock(db) // Captura el error
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(bestStock)
