@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/JhonnyPG/StockAnalyzer/internal/models"
@@ -12,10 +13,14 @@ import (
 func GetStocks(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		rows, err := db.Query(`
-            SELECT * FROM stocks
-        `)
+            SELECT ticker, company, brokerage, action, rating_from, rating_to, target_from, target_to, time FROM stocks`)
+
 		if err != nil {
 			http.Error(w, "Error en la consulta", http.StatusInternalServerError)
+			return
+		}
+		if !rows.Next() {
+			http.Error(w, "No hay datos disponibles", http.StatusNotFound)
 			return
 		}
 		defer rows.Close()
@@ -35,19 +40,24 @@ func GetStocks(db *sql.DB) http.HandlerFunc {
 				&s.Time,
 			)
 			if err != nil {
-				http.Error(w, "Error al leer datos", http.StatusInternalServerError)
+				log.Printf("Error al leer fila: %v", err)
+				http.Error(w, "Error al leer datos de la base", http.StatusInternalServerError)
 				return
 			}
 			stocks = append(stocks, s)
+			fmt.Printf("stock append: %v\n", s)
 		}
 
-		if err = rows.Err(); err != nil {
-			http.Error(w, "Error post-escaneo: "+err.Error(), http.StatusInternalServerError)
+		if len(stocks) == 0 {
+			http.Error(w, "No hay datos disponibles", http.StatusNotFound)
 			return
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(stocks)
+		if err := json.NewEncoder(w).Encode(stocks); err != nil {
+			log.Println("Error al codificar la respuesta:", err)
+			http.Error(w, "Error al codificar la respuesta", http.StatusInternalServerError)
+		}
 	}
 }
 
