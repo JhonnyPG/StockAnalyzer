@@ -25,7 +25,7 @@ export const useRecommendationStore = defineStore('recommendations', {
             this.error = null
             try {
                 const response = await axios.get('/api/recommendations')
-                this.bestStock = response.data.best_stock
+                this.bestStock = response.data
             } catch (error) {
                 this.error = error instanceof Error ? error.message : 'Failed to fetch recommendation'
             } finally {

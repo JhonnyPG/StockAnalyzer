@@ -13,7 +13,7 @@ onMounted(() => {
 
 <template>
     <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4">🚀 Mejor Recomendación</h2>
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">🚀 Best Daily Recommendation</h2>
   
       <!-- Estado de carga -->
       <div v-if="store.loading" class="animate-pulse space-y-4">
@@ -53,7 +53,7 @@ onMounted(() => {
           </div>
           
           <div class="p-3 bg-gray-50 rounded">
-            <p class="text-sm text-black-500 mb-1">Cambio Rating</p>
+            <p class="text-sm text-black-500 mb-1">Rating Change</p>
             <div class="flex items-center gap-2">
               <span class="px-2 py-1 text-sm rounded-full bg-red-100 text-red-800">
                 {{ store.bestStock.rating_from }}

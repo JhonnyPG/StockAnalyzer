@@ -25,7 +25,7 @@ export const useStockStore = defineStore('stocks', {
             this.error = null
             try {
                 const response = await axios.get('/api/stocks')
-                this.stocks = response.data.items
+                this.stocks = response.data
             } catch (error) {
                 this.error = error instanceof Error ? error.message : 'Failed to fetch stocks'
             } finally {

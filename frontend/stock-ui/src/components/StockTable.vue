@@ -25,7 +25,7 @@ onMounted(() => {
           <th class = "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase" > Rating To </th>
         </tr>
       </thead>
-      <tbody class="bg-yellow divide-y divide-gray-200">
+      <tbody class="bg-yellow-100 divide-y divide-gray-200">
         <tr v-for="stock in store.stocks" :key="stock.ticker">
           <td class="px-6 py-4 whitespace-nowrap font-medium">{{ stock.ticker }}</td>
           <td class="px-6 py-4 whitespace-nowrap">{{ stock.company }}</td>
