@@ -13,6 +13,7 @@ func main() {
 	defer db.Close()
 
 	http.HandleFunc("/stocks", handlers.GetStocks(db))
+	http.HandleFunc("/recommendations", handlers.GetRecommendationHandler(db))
 
 	log.Println("Server running on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))

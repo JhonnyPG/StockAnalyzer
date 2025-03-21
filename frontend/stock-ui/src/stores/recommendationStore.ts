@@ -1,33 +1,33 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-interface Stock {
+interface BestStock {
     ticker: string
     company: string
     brokerage: string
     action: string
-    target_from: string
-    target_to: string
     rating_from: string
     rating_to: string
+    target_from: string
+    target_to: string
     time: string
 }
 
-export const useStockStore = defineStore('stocks', {
+export const useRecommendationStore = defineStore('recommendations', {
     state: () => ({
-        stocks: [] as Stock[],
+        bestStock: null as BestStock | null,
         loading: false,
         error: null as string | null
     }),
     actions: {
-        async fetchStocks() {
+        async fetchBestStock() {
             this.loading = true
             this.error = null
             try {
-                const response = await axios.get('/api/stocks')
-                this.stocks = response.data.items
+                const response = await axios.get('/api/recommendations')
+                this.bestStock = response.data.best_stock
             } catch (error) {
-                this.error = error instanceof Error ? error.message : 'Failed to fetch stocks'
+                this.error = error instanceof Error ? error.message : 'Failed to fetch recommendation'
             } finally {
                 this.loading = false
             }

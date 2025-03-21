@@ -64,10 +64,23 @@ func GetStocks(db *sql.DB) http.HandlerFunc {
 func calculateBestStock(db *sql.DB) (models.Stock, error) {
 	var bestStock models.Stock
 	err := db.QueryRow(`
-        SELECT * FROM stocks 
-        ORDER BY (target_to::numeric - target_from::numeric) DESC 
-        LIMIT 1
-    `).Scan(
+        SELECT 
+            ticker,
+            company,
+            brokerage,
+            action,
+            rating_from,
+            rating_to,
+            target_from,
+            target_to,
+            time
+        FROM stocks 
+        ORDER BY (
+        REPLACE(target_to, '$', '')::NUMERIC - 
+        REPLACE(target_from, '$', '')::NUMERIC
+		) DESC 
+    	LIMIT 1
+    	`).Scan(
 		&bestStock.Ticker,
 		&bestStock.Company,
 		&bestStock.Brokerage,
