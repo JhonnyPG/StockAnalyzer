@@ -6,7 +6,7 @@ This project is based on consuming an api at the backend and showing the results
 
 
 ## Technologies used for frontend
-- Vue 3 with TypeScrip
+- Vue 3 with TypeScript
 - Tailwind CSS
 - Pinia
 
