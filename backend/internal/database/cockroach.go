@@ -31,7 +31,11 @@ func Connect() *sql.DB {
 	return db
 }
 
-func InsertStock(db *sql.DB, stock models.Stock) error {
+type DBExecutor interface {
+	Exec(query string, args ...interface{}) (sql.Result, error)
+}
+
+func InsertStock(db DBExecutor, stock models.Stock) error {
 	query := `
         INSERT INTO stocks 
             (ticker, company, brokerage, action, rating_from, rating_to, target_from, target_to, time)
