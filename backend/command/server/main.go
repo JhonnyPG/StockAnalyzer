@@ -23,8 +23,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error Getting stocks: %v", err)
 	}
+	apiResponseA, err := client.GetAllStock()
+	if err != nil {
+		log.Fatalf("Error Getting All stocks: %v", err)
+	}
 
 	// show obtained data
+	fmt.Printf("Total de registros obtenidos: %d\n", len(apiResponseA))
 	fmt.Printf("Retrieved %d stocks\n", len(apiResponse.Items))
 	for i, item := range apiResponse.Items {
 		fmt.Printf("%d. %s (%s) - %s by %s - Rating: %s -> %s, Target: %s -> %s\n",
@@ -46,7 +51,7 @@ func main() {
 	defer db.Close()
 
 	// Insertar datos en CockroachDB
-	for _, stock := range apiResponse.Items {
+	for _, stock := range apiResponseA {
 		err := database.InsertStock(db, stock)
 		if err != nil {
 			log.Printf("Error insertando stock %s: %v", stock.Ticker, err)

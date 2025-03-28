@@ -17,6 +17,11 @@ type APIResponse struct {
 	NextPage string         `json:"next_page"`
 }
 
+type APIResponseA struct {
+	Items    []models.Stock `json:"items"`
+	NextPage string         `json:"next_page"`
+}
+
 // Client is a struct that represents the client
 type Client struct {
 	BaseURL    string
